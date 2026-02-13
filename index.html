@@ -6,7 +6,6 @@
 <title>Seni Seviyorum 💙</title>
 
 <style>
-/* Ekranın kaymasını engelleyen ve GIF'i tam oturtan ayarlar */
 html, body {
   margin: 0;
   padding: 0;
@@ -18,7 +17,6 @@ html, body {
 
 body {
   font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-  /* Arka Plan GIF'i */
   background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('kolaj.gif');
   background-position: center center;
   background-repeat: no-repeat;
@@ -45,7 +43,7 @@ body {
 }
 
 h1 { font-size: 1.8rem; margin-bottom: 10px; text-shadow: 2px 2px 8px rgba(0,0,0,0.7); }
-p { font-size: 1.1rem; margin-bottom: 20px; line-height: 1.4; }
+p { font-size: 1.1rem; margin-bottom: 20px; }
 
 button {
   padding: 16px 35px;
@@ -56,22 +54,21 @@ button {
   color: white;
   font-weight: bold;
   cursor: pointer;
-  transition: transform 0.2s;
   box-shadow: 0 4px 15px rgba(255, 64, 129, 0.5);
 }
 
-button:active { transform: scale(0.95); }
+.ticket { display: none; margin-top: 20px; animation: surgun 1.5s ease-out; }
+.ticket img { width: 100%; border-radius: 12px; }
 
-.ticket { 
-  display: none; 
-  margin-top: 20px; 
-  animation: surgun 1.5s ease-out; 
-}
-
-.ticket img { 
-  width: 100%; 
-  border-radius: 12px; 
-  box-shadow: 0 0 25px rgba(255,255,255,0.2); 
+/* ⏱️ Sayaç Tasarımı */
+#timer-label { margin-top: 20px; font-size: 0.9rem; color: #ffeb3b; opacity: 0.9; }
+#countdown {
+  margin-top: 5px;
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #4fc3f7;
+  letter-spacing: 1px;
+  text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
 }
 
 @keyframes surgun {
@@ -79,18 +76,10 @@ button:active { transform: scale(0.95); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Animasyonlu Objeler */
-.floating {
-  position: fixed;
-  bottom: -50px;
-  pointer-events: none;
-  z-index: 1;
-}
-
+.floating { position: fixed; bottom: -50px; pointer-events: none; z-index: 1; }
 @keyframes floatUp {
   0% { transform: translateY(0) rotate(0deg); opacity: 0; }
   10% { opacity: 0.8; }
-  90% { opacity: 0.8; }
   100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
 }
 </style>
@@ -112,39 +101,57 @@ button:active { transform: scale(0.95); }
 
   <div class="ticket" id="ticket">
     <img src="bilet.png" alt="Bilet">
-    <p style="margin-top:15px; font-weight: bold;">İyi ki benimlesin... ✨</p>
+    <p style="margin-top:15px; font-weight: bold; margin-bottom: 5px;">İyi ki benimlesin... ✨</p>
+    
+    <div id="timer-label">Büyük güne kalan zaman:</div>
+    <div id="countdown">Hesaplanıyor...</div>
   </div>
 </div>
 
 <script>
-// ⏱️ Geri Sayım ve Buton Gösterme
+// Buton Gecikmesi
 setTimeout(() => {
   document.getElementById("readyBtn").style.display = "inline-block";
   document.getElementById("statusText").innerText = "Şimdi butona basabilirsin...";
 }, 5000);
 
-// 🎟️ Bileti Göster ve Sesi Başlat
 function showTicket() {
   const audio = document.getElementById("arkaPlanMuzigi");
-  const ticket = document.getElementById("ticket");
-  const btn = document.getElementById("readyBtn");
-  const loading = document.getElementById("loadingArea");
-
-  // Sesi Oynat (Hata kontrolü ile)
-  audio.play().then(() => {
-    console.log("Müzik başladı.");
-  }).catch(e => {
-    console.log("Ses hatası:", e);
-    // Bazı mobil cihazlar için ikinci bir zorlama
+  audio.play().catch(e => {
     document.body.addEventListener('click', () => { audio.play(); }, {once: true});
   });
 
-  loading.style.display = "none";
-  btn.style.display = "none";
-  ticket.style.display = "block";
+  document.getElementById("loadingArea").style.display = "none";
+  document.getElementById("readyBtn").style.display = "none";
+  document.getElementById("ticket").style.display = "block";
+  
+  startTimer();
 }
 
-// 🎈 Kalp ve Kelebek Oluşturucu
+function startTimer() {
+  // Hedef Tarih: 03.04.2026 (Ay ismi İngilizce formatta "Apr" olarak yazılır)
+  const hedefTarih = new Date("Apr 3, 2026 00:00:00").getTime(); 
+
+  const x = setInterval(function() {
+    const simdi = new Date().getTime();
+    const fark = hedefTarih - simdi;
+
+    // Gün, Saat, Dakika ve Saniye hesaplamaları
+    const gun = Math.floor(fark / (1000 * 60 * 60 * 24));
+    const saat = Math.floor((fark % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const dakika = Math.floor((fark % (1000 * 60 * 60)) / (1000 * 60));
+    const saniye = Math.floor((fark % (1000 * 60)) / 1000);
+
+    document.getElementById("countdown").innerHTML = gun + "g " + saat + "s " + dakika + "dk " + saniye + "sn";
+
+    if (fark < 0) {
+      clearInterval(x);
+      document.getElementById("countdown").innerHTML = "Kavuştuk! ❤️";
+    }
+  }, 1000);
+}
+
+// Efektler
 function createParticle(emoji, count) {
   for(let i=0; i<count; i++) {
     setTimeout(() => {
@@ -152,13 +159,11 @@ function createParticle(emoji, count) {
       p.className = "floating";
       p.innerHTML = emoji;
       p.style.left = Math.random() * 100 + "vw";
-      p.style.fontSize = (Math.random() * 20 + 15) + "px";
       p.style.animation = `floatUp ${6 + Math.random() * 4}s linear infinite`;
       document.body.appendChild(p);
     }, i * 300);
   }
 }
-
 createParticle("💙", 12);
 createParticle("🦋", 8);
 </script>
