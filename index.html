@@ -2,148 +2,165 @@
 <html lang="tr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sürpriz</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Seni Seviyorum 💙</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial, sans-serif;
-  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
-  overflow:hidden;
-  color:white;
-  text-align:center;
+/* Ekranın kaymasını engelleyen ve GIF'i tam oturtan ayarlar */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #000;
 }
 
-.container{
-  position:relative;
-  z-index:2;
-  padding:20px;
-  margin-top:40px;
+body {
+  font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  /* Arka Plan GIF'i */
+  background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('kolaj.gif');
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
 }
 
-h1{
-  font-size:2rem;
-  margin-bottom:15px;
+.container {
+  position: relative;
+  z-index: 10;
+  padding: 25px;
+  width: 85%;
+  max-width: 400px;
+  background: rgba(0, 0, 0, 0.4);
+  border-radius: 20px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
-p{
-  font-size:1.2rem;
-  margin-bottom:25px;
+h1 { font-size: 1.8rem; margin-bottom: 10px; text-shadow: 2px 2px 8px rgba(0,0,0,0.7); }
+p { font-size: 1.1rem; margin-bottom: 20px; line-height: 1.4; }
+
+button {
+  padding: 16px 35px;
+  font-size: 1.2rem;
+  border: none;
+  border-radius: 50px;
+  background: #ff4081;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: transform 0.2s;
+  box-shadow: 0 4px 15px rgba(255, 64, 129, 0.5);
 }
 
-button{
-  padding:15px 30px;
-  font-size:1.2rem;
-  border:none;
-  border-radius:30px;
-  background:#4fc3f7;
-  color:white;
-  cursor:pointer;
-  box-shadow:0 0 20px rgba(79,195,247,0.8);
+button:active { transform: scale(0.95); }
+
+.ticket { 
+  display: none; 
+  margin-top: 20px; 
+  animation: surgun 1.5s ease-out; 
 }
 
-button:hover{
-  background:#29b6f6;
+.ticket img { 
+  width: 100%; 
+  border-radius: 12px; 
+  box-shadow: 0 0 25px rgba(255,255,255,0.2); 
 }
 
-/* 🎟️ Bilet */
-.ticket{
-  display:none;
-  margin-top:25px;
+@keyframes surgun {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.ticket img{
-  width:90%;
-  max-width:420px;
-  border-radius:15px;
-  box-shadow:0 0 30px rgba(255,255,255,0.4);
+/* Animasyonlu Objeler */
+.floating {
+  position: fixed;
+  bottom: -50px;
+  pointer-events: none;
+  z-index: 1;
 }
 
-/* 💙 Kalpler */
-.heart{
-  position:fixed;
-  bottom:-50px;
-  font-size:22px;
-  animation:floatUp 8s linear infinite;
-  opacity:0.7;
-}
-
-@keyframes floatUp{
-  0%{transform:translateY(0) scale(1); opacity:0.8;}
-  100%{transform:translateY(-110vh) scale(1.5); opacity:0;}
-}
-
-/* 🦋 Kelebekler */
-.butterfly{
-  position:fixed;
-  top:110vh;
-  font-size:26px;
-  animation:flyUp linear infinite;
-}
-
-@keyframes flyUp{
-  0%{transform:translateY(0) translateX(0);}
-  50%{transform:translateY(-50vh) translateX(40px);}
-  100%{transform:translateY(-120vh) translateX(-40px);}
+@keyframes floatUp {
+  0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.8; }
+  100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
 }
 </style>
 </head>
 
 <body>
 
-<audio id="arkaPlanMuzigi" src="muzik.mp3"></audio>
+<audio id="arkaPlanMuzigi" preload="auto" loop>
+  <source src="muzik.mp3" type="audio/mpeg">
+</audio>
 
 <div class="container">
-  <h1>💙 Sana Küçük Bir Sürprizim Var 💙</h1>
-  <p>Hazır olduğunda butona bas...</p>
-
+  <div id="loadingArea">
+    <h1>💙 Senin İçin Küçük Bir Sürprizim Var 💙</h1>
+    <p id="statusText">Lütfen 5 saniye bekle...</p>
+  </div>
+  
   <button id="readyBtn" style="display:none;" onclick="showTicket()">Hazırım 💙</button>
 
   <div class="ticket" id="ticket">
     <img src="bilet.png" alt="Bilet">
+    <p style="margin-top:15px; font-weight: bold;">İyi ki benimlesin... ✨</p>
   </div>
 </div>
 
 <script>
+// ⏱️ Geri Sayım ve Buton Gösterme
+setTimeout(() => {
+  document.getElementById("readyBtn").style.display = "inline-block";
+  document.getElementById("statusText").innerText = "Şimdi butona basabilirsin...";
+}, 5000);
 
-/* ⏱️ 5 saniye sonra buton */
-setTimeout(()=>{
-  document.getElementById("readyBtn").style.display="inline-block";
-},5000);
+// 🎟️ Bileti Göster ve Sesi Başlat
+function showTicket() {
+  const audio = document.getElementById("arkaPlanMuzigi");
+  const ticket = document.getElementById("ticket");
+  const btn = document.getElementById("readyBtn");
+  const loading = document.getElementById("loadingArea");
 
-/* 🎟️ Bileti göster ve Müziği başlat */
-function showTicket(){
-  document.getElementById("ticket").style.display="block";
-  document.getElementById("readyBtn").style.display="none";
-  
-  // Müziği başlatan kısım
-  var audio = document.getElementById("arkaPlanMuzigi");
-  audio.play().catch(function(error) {
-    console.log("Müzik otomatik başlatılamadı, tarayıcı engellemiş olabilir: ", error);
+  // Sesi Oynat (Hata kontrolü ile)
+  audio.play().then(() => {
+    console.log("Müzik başladı.");
+  }).catch(e => {
+    console.log("Ses hatası:", e);
+    // Bazı mobil cihazlar için ikinci bir zorlama
+    document.body.addEventListener('click', () => { audio.play(); }, {once: true});
   });
+
+  loading.style.display = "none";
+  btn.style.display = "none";
+  ticket.style.display = "block";
 }
 
-/* 💙 Kalpler */
-for(let i=0;i<20;i++){
-  let h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="💙";
-  h.style.left=Math.random()*100+"vw";
-  h.style.animationDuration=(6+Math.random()*5)+"s";
-  document.body.appendChild(h);
+// 🎈 Kalp ve Kelebek Oluşturucu
+function createParticle(emoji, count) {
+  for(let i=0; i<count; i++) {
+    setTimeout(() => {
+      const p = document.createElement("div");
+      p.className = "floating";
+      p.innerHTML = emoji;
+      p.style.left = Math.random() * 100 + "vw";
+      p.style.fontSize = (Math.random() * 20 + 15) + "px";
+      p.style.animation = `floatUp ${6 + Math.random() * 4}s linear infinite`;
+      document.body.appendChild(p);
+    }, i * 300);
+  }
 }
 
-/* 🦋 Kelebekler */
-for(let i=0;i<12;i++){
-  let b=document.createElement("div");
-  b.className="butterfly";
-  b.innerHTML="🦋";
-  b.style.left=Math.random()*100+"vw";
-  b.style.animationDuration=(8+Math.random()*6)+"s";
-  document.body.appendChild(b);
-}
-
+createParticle("💙", 12);
+createParticle("🦋", 8);
 </script>
 
 </body>
