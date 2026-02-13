@@ -8,55 +8,37 @@
 <style>
 body{
   margin:0;
-  font-family:Arial, sans-serif;
+  font-family:Arial;
   background:linear-gradient(180deg,#0f2027,#203a43,#2c5364);
-  overflow:hidden;
   color:white;
+  overflow:hidden;
   text-align:center;
 }
 
-/* Yıldız */
-.star{
-  position:absolute;
-  width:2px;
-  height:2px;
-  background:white;
-  border-radius:50%;
-  animation:twinkle 2s infinite alternate;
-}
-@keyframes twinkle{from{opacity:0.2}to{opacity:1}}
-
-/* CAM KART — KOYU */
+/* CAM KART */
 .card{
   position:absolute;
   top:50%;
   left:50%;
   transform:translate(-50%,-50%);
-  background:rgba(0,0,0,0.55);  /* OKUNAKLI */
+  background:rgba(0,0,0,0.55);
   backdrop-filter:blur(25px);
-  padding:40px 30px;
+  padding:35px 25px;
   border-radius:25px;
-  box-shadow:0 0 50px rgba(0,200,255,0.4);
   width:90%;
-  max-width:400px;
+  max-width:420px;
+  box-shadow:0 0 50px rgba(0,200,255,0.4);
 }
 
 /* Kalp */
 .heart{
   font-size:65px;
   animation:pulse 1.5s infinite;
-  filter:drop-shadow(0 0 15px #00c6ff);
 }
 @keyframes pulse{
   0%{transform:scale(1)}
   50%{transform:scale(1.2)}
   100%{transform:scale(1)}
-}
-
-/* Yazı */
-h1,h2{
-  color:#ffffff;
-  text-shadow:0 0 10px rgba(255,255,255,0.8);
 }
 
 /* Buton */
@@ -70,98 +52,110 @@ button{
   color:white;
   cursor:pointer;
   box-shadow:0 0 20px rgba(0,198,255,0.7);
-  animation:glow 2s infinite alternate;
-}
-@keyframes glow{
-  from{box-shadow:0 0 10px #00c6ff}
-  to{box-shadow:0 0 35px #00c6ff}
 }
 
 /* Bilet */
 .ticket{
-  width:95%;
-  max-width:450px;
-  border-radius:20px;
-  margin-top:25px;
-  box-shadow:0 0 40px rgba(255,255,255,0.6);
+  width:100%;
+  max-height:65vh;
+  object-fit:contain;
+  border-radius:18px;
+  margin-top:20px;
+  box-shadow:0 0 40px rgba(255,255,255,0.7);
 }
 
-/* Kelebek */
-.butterfly{
-  position:absolute;
-  font-size:22px;
-  animation:fly linear infinite;
+/* Konfeti */
+.confetti{
+  position:fixed;
+  top:-10px;
+  width:10px;
+  height:10px;
+  background:red;
+  animation:fall 3s linear forwards;
 }
-@keyframes fly{
-  from{transform:translateY(110vh) rotate(0deg)}
-  to{transform:translateY(-10vh) rotate(360deg)}
+@keyframes fall{
+  to{
+    transform:translateY(110vh) rotate(720deg);
+  }
 }
 </style>
 </head>
 
 <body>
 
-<!-- 🎵 MÜZİK -->
 <audio id="music" src="muzik.mp3"></audio>
-
-<!-- Yıldızlar -->
-<script>
-for(let i=0;i<120;i++){
-  let s=document.createElement("div");
-  s.className="star";
-  s.style.left=Math.random()*100+"vw";
-  s.style.top=Math.random()*100+"vh";
-  document.body.appendChild(s);
-}
-</script>
-
-<!-- Kelebekler -->
-<script>
-for(let i=0;i<8;i++){
-  let b=document.createElement("div");
-  b.className="butterfly";
-  b.innerHTML="🦋";
-  b.style.left=Math.random()*100+"vw";
-  b.style.animationDuration=(6+Math.random()*6)+"s";
-  document.body.appendChild(b);
-}
-</script>
 
 <!-- SAYFA 1 -->
 <div id="page1" class="card">
   <div class="heart">💙</div>
   <h1>Hazır mısın?</h1>
-  <button onclick="startSurprise()">Hazırım 💙</button>
+
+  <button id="startBtn" onclick="start()" style="display:none;">
+    Hazırım 💙
+  </button>
 </div>
 
 <!-- SAYFA 2 -->
 <div id="page2" class="card" style="display:none;">
   <div class="heart">💙</div>
   <h2>Sürprize kalan süre</h2>
-  <h1 id="countdown">Yükleniyor...</h1>
+  <h1 id="countdown"></h1>
+</div>
 
+<!-- SAYFA 3 -->
+<div id="page3" class="card" style="display:none;">
   <img src="bilet.png" class="ticket">
 </div>
 
 <script>
-function startSurprise(){
 
-  /* Müzik başlat */
+/* 5 sn sonra Hazırım butonu */
+setTimeout(()=>{
+  document.getElementById("startBtn").style.display="inline-block";
+},5000);
+
+/* Hazırım */
+function start(){
+
+  /* Müzik */
   document.getElementById("music").play();
+
+  /* Konfeti */
+  confettiExplosion();
 
   document.getElementById("page1").style.display="none";
   document.getElementById("page2").style.display="block";
 }
 
-/* Geri sayım */
+/* Konfeti patlama */
+function confettiExplosion(){
+  for(let i=0;i<120;i++){
+    let c=document.createElement("div");
+    c.className="confetti";
+    c.style.left=Math.random()*100+"vw";
+    c.style.background=
+      "hsl("+Math.random()*360+",100%,50%)";
+    c.style.animationDuration=
+      (2+Math.random()*2)+"s";
+    document.body.appendChild(c);
+
+    setTimeout(()=>c.remove(),4000);
+  }
+}
+
+/* GERİ SAYIM — 03.04.2026 21:00 */
 const target = new Date("April 3, 2026 21:00:00").getTime();
 
-setInterval(()=>{
+const timer = setInterval(()=>{
   const now = new Date().getTime();
   const diff = target - now;
 
-  if(diff < 0){
-    document.getElementById("countdown").innerHTML="Sürpriz zamanı 💙";
+  if(diff <= 0){
+    clearInterval(timer);
+
+    /* Bilet göster */
+    document.getElementById("page2").style.display="none";
+    document.getElementById("page3").style.display="block";
     return;
   }
 
@@ -173,6 +167,7 @@ setInterval(()=>{
   document.getElementById("countdown").innerHTML =
     d+" gün "+h+" saat "+m+" dk "+s+" sn";
 },1000);
+
 </script>
 
 </body>
