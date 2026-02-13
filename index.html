@@ -3,129 +3,136 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bir Sürprizim Var ❤️</title>
+<title>Bizim Hikayemiz 💙</title>
 
 <style>
 body{
   margin:0;
-  background:#000;
-  color:white;
-  font-family:Arial, sans-serif;
-  text-align:center;
+  height:100vh;
   overflow:hidden;
-}
-
-#container{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-}
-
-#countdown{
-  font-size:42px;
-  margin-bottom:30px;
-}
-
-button{
-  padding:15px 30px;
-  font-size:20px;
-  border:none;
-  border-radius:30px;
-  background:#ff2d55;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
+  background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
+  display:flex;
+  justify-content:center;
+  align-items:center;
   color:white;
-  cursor:pointer;
 }
 
-#ticket{
-  display:none;
-  animation:fadeIn 2s forwards;
+/* 💎 Cam Kart */
+.card{
+  backdrop-filter: blur(18px);
+  background: rgba(255,255,255,0.08);
+  border-radius: 30px;
+  padding: 40px 25px;
+  text-align:center;
+  box-shadow: 0 0 40px rgba(0,200,255,0.3);
+  width:90%;
+  max-width:420px;
 }
 
-#ticket img{
-  width:90vw;
-  max-width:500px;
-  border-radius:20px;
-  box-shadow:0 0 40px rgba(255,45,85,0.7);
-}
-
-#message{
-  margin-top:20px;
-  font-size:22px;
-  opacity:0;
-  animation:fadeIn 3s forwards;
-}
-
-@keyframes fadeIn{
-  from{opacity:0; transform:scale(0.8);}
-  to{opacity:1; transform:scale(1);}
-}
-
-/* Kalpler */
+/* 💙 Neon Kalp */
 .heart{
-  position:fixed;
-  font-size:24px;
-  animation:fall 4s linear infinite;
+  font-size:70px;
+  animation: beat 1.2s infinite;
+  text-shadow:0 0 25px #00d0ff;
 }
 
-@keyframes fall{
-  0%{transform:translateY(-10vh);}
-  100%{transform:translateY(110vh);}
+@keyframes beat{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.25)}
+}
+
+h1{
+  margin:10px 0 5px;
+  font-size:28px;
+}
+
+#counter{
+  font-size:22px;
+  margin-top:15px;
+  line-height:1.5;
+}
+
+/* ✨ Yıldızlar */
+.star{
+  position:fixed;
+  width:3px;
+  height:3px;
+  background:white;
+  border-radius:50%;
+  opacity:.8;
+  animation: twinkle 2s infinite alternate;
+}
+
+@keyframes twinkle{
+  from{opacity:.2}
+  to{opacity:1}
+}
+
+/* 🦋 Kelebek */
+.butterfly{
+  position:fixed;
+  font-size:26px;
+  animation: fly 14s linear infinite;
+}
+
+@keyframes fly{
+  0%{transform:translate(-10vw,80vh)}
+  25%{transform:translate(20vw,40vh)}
+  50%{transform:translate(60vw,70vh)}
+  75%{transform:translate(80vw,20vh)}
+  100%{transform:translate(110vw,60vh)}
 }
 </style>
 </head>
 
 <body>
 
-<div id="container">
-
-  <div id="countdown"></div>
-
-  <button onclick="showTicket()">Hazırım ❤️</button>
-
-  <div id="ticket">
-    <img src="bilet.png" alt="Bilet">
-    <div id="message">
-      Benimle konsere gelir misin, Gamze? 💖<br>
-      3 Nisan 2026 — Birlikte ❤️
-    </div>
-  </div>
-
+<div class="card">
+  <div class="heart">💙</div>
+  <h1>Seni Seviyorum</h1>
+  <div id="counter"></div>
 </div>
 
 <script>
-// Geri sayım
-const targetDate = new Date("April 3, 2026 21:00:00").getTime();
+/* 📅 Tanışma Tarihi */
+const startDate = new Date("2024-01-01 00:00:00");
 
-setInterval(() => {
-  const now = new Date().getTime();
-  const diff = targetDate - now;
+function updateCounter(){
+  const now = new Date();
+  const diff = now - startDate;
 
-  const d = Math.floor(diff / (1000*60*60*24));
-  const h = Math.floor((diff % (1000*60*60*24))/(1000*60*60));
-  const m = Math.floor((diff % (1000*60*60))/(1000*60));
-  const s = Math.floor((diff % (1000*60))/1000);
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor(diff/(1000*60*60))%24;
+  const m = Math.floor(diff/(1000*60))%60;
+  const s = Math.floor(diff/1000)%60;
 
-  document.getElementById("countdown").innerHTML =
-    d+"g "+h+"s "+m+"d "+s+"sn";
-},1000);
-
-// Bilet göster
-function showTicket(){
-  document.getElementById("countdown").style.display="none";
-  document.querySelector("button").style.display="none";
-  document.getElementById("ticket").style.display="block";
-
-  // Kalp yağmuru
-  for(let i=0;i<30;i++){
-    let heart=document.createElement("div");
-    heart.className="heart";
-    heart.innerHTML="❤️";
-    heart.style.left=Math.random()*100+"vw";
-    heart.style.animationDuration=(2+Math.random()*3)+"s";
-    document.body.appendChild(heart);
-  }
+  document.getElementById("counter").innerHTML =
+    d+" gün<br>"+h+" saat "+m+" dk "+s+" sn 💙";
 }
+setInterval(updateCounter,1000);
+updateCounter();
+
+/* ✨ Yıldız oluştur */
+function star(){
+  const s=document.createElement("div");
+  s.className="star";
+  s.style.left=Math.random()*100+"vw";
+  s.style.top=Math.random()*100+"vh";
+  document.body.appendChild(s);
+}
+for(let i=0;i<120;i++) star();
+
+/* 🦋 Kelebek oluştur */
+function butterfly(){
+  const b=document.createElement("div");
+  b.className="butterfly";
+  b.innerHTML="🦋";
+  b.style.animationDuration=(10+Math.random()*10)+"s";
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(),20000);
+}
+setInterval(butterfly,2500);
 </script>
 
 </body>
