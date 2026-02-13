@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bir Sürprizim Var ❤️</title>
+
+<style>
+body{
+  margin:0;
+  background:#000;
+  color:white;
+  font-family:Arial, sans-serif;
+  text-align:center;
+  overflow:hidden;
+}
+
+#container{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+}
+
+#countdown{
+  font-size:42px;
+  margin-bottom:30px;
+}
+
+button{
+  padding:15px 30px;
+  font-size:20px;
+  border:none;
+  border-radius:30px;
+  background:#ff2d55;
+  color:white;
+  cursor:pointer;
+}
+
+#ticket{
+  display:none;
+  animation:fadeIn 2s forwards;
+}
+
+#ticket img{
+  width:90vw;
+  max-width:500px;
+  border-radius:20px;
+  box-shadow:0 0 40px rgba(255,45,85,0.7);
+}
+
+#message{
+  margin-top:20px;
+  font-size:22px;
+  opacity:0;
+  animation:fadeIn 3s forwards;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:scale(0.8);}
+  to{opacity:1; transform:scale(1);}
+}
+
+/* Kalpler */
+.heart{
+  position:fixed;
+  font-size:24px;
+  animation:fall 4s linear infinite;
+}
+
+@keyframes fall{
+  0%{transform:translateY(-10vh);}
+  100%{transform:translateY(110vh);}
+}
+</style>
+</head>
+
+<body>
+
+<div id="container">
+
+  <div id="countdown"></div>
+
+  <button onclick="showTicket()">Hazırım ❤️</button>
+
+  <div id="ticket">
+    <img src="bilet.png" alt="Bilet">
+    <div id="message">
+      Benimle konsere gelir misin, Gamze? 💖<br>
+      3 Nisan 2026 — Birlikte ❤️
+    </div>
+  </div>
+
+</div>
+
+<script>
+// Geri sayım
+const targetDate = new Date("April 3, 2026 21:00:00").getTime();
+
+setInterval(() => {
+  const now = new Date().getTime();
+  const diff = targetDate - now;
+
+  const d = Math.floor(diff / (1000*60*60*24));
+  const h = Math.floor((diff % (1000*60*60*24))/(1000*60*60));
+  const m = Math.floor((diff % (1000*60*60))/(1000*60));
+  const s = Math.floor((diff % (1000*60))/1000);
+
+  document.getElementById("countdown").innerHTML =
+    d+"g "+h+"s "+m+"d "+s+"sn";
+},1000);
+
+// Bilet göster
+function showTicket(){
+  document.getElementById("countdown").style.display="none";
+  document.querySelector("button").style.display="none";
+  document.getElementById("ticket").style.display="block";
+
+  // Kalp yağmuru
+  for(let i=0;i<30;i++){
+    let heart=document.createElement("div");
+    heart.className="heart";
+    heart.innerHTML="❤️";
+    heart.style.left=Math.random()*100+"vw";
+    heart.style.animationDuration=(2+Math.random()*3)+"s";
+    document.body.appendChild(heart);
+  }
+}
+</script>
+
+</body>
+</html>
