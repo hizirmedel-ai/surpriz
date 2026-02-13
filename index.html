@@ -3,136 +3,165 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bizim Hikayemiz 💙</title>
+<title>Sürpriz ❤️</title>
 
 <style>
 body{
   margin:0;
-  height:100vh;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(180deg,#0f2027,#203a43,#2c5364);
   overflow:hidden;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;
-  background: radial-gradient(circle at top, #0f2027, #203a43, #2c5364);
-  display:flex;
-  justify-content:center;
-  align-items:center;
   color:white;
-}
-
-/* 💎 Cam Kart */
-.card{
-  backdrop-filter: blur(18px);
-  background: rgba(255,255,255,0.08);
-  border-radius: 30px;
-  padding: 40px 25px;
   text-align:center;
-  box-shadow: 0 0 40px rgba(0,200,255,0.3);
-  width:90%;
-  max-width:420px;
 }
 
-/* 💙 Neon Kalp */
-.heart{
-  font-size:70px;
-  animation: beat 1.2s infinite;
-  text-shadow:0 0 25px #00d0ff;
-}
-
-@keyframes beat{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(1.25)}
-}
-
-h1{
-  margin:10px 0 5px;
-  font-size:28px;
-}
-
-#counter{
-  font-size:22px;
-  margin-top:15px;
-  line-height:1.5;
-}
-
-/* ✨ Yıldızlar */
+/* Yıldızlar */
 .star{
-  position:fixed;
-  width:3px;
-  height:3px;
+  position:absolute;
+  width:2px;
+  height:2px;
   background:white;
   border-radius:50%;
-  opacity:.8;
-  animation: twinkle 2s infinite alternate;
+  opacity:0.8;
+  animation:twinkle 2s infinite alternate;
+}
+@keyframes twinkle{from{opacity:0.2}to{opacity:1}}
+
+/* Ortadaki kart */
+.card{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  background:rgba(255,255,255,0.08);
+  backdrop-filter:blur(20px);
+  padding:40px 30px;
+  border-radius:25px;
+  box-shadow:0 0 40px rgba(0,255,255,0.3);
+  width:90%;
+  max-width:400px;
 }
 
-@keyframes twinkle{
-  from{opacity:.2}
-  to{opacity:1}
+/* Kalp */
+.heart{
+  font-size:60px;
+  animation:pulse 1.5s infinite;
+  filter:drop-shadow(0 0 15px #00c6ff);
+}
+@keyframes pulse{
+  0%{transform:scale(1)}
+  50%{transform:scale(1.2)}
+  100%{transform:scale(1)}
 }
 
-/* 🦋 Kelebek */
+/* Buton */
+button{
+  margin-top:25px;
+  padding:16px 35px;
+  border:none;
+  border-radius:50px;
+  font-size:20px;
+  background:linear-gradient(45deg,#00c6ff,#0072ff);
+  color:white;
+  cursor:pointer;
+  box-shadow:0 0 20px rgba(0,198,255,0.7);
+  animation:glow 2s infinite alternate;
+}
+@keyframes glow{
+  from{box-shadow:0 0 10px #00c6ff}
+  to{box-shadow:0 0 35px #00c6ff}
+}
+
+/* Bilet */
+.ticket{
+  width:95%;
+  max-width:450px;
+  border-radius:20px;
+  margin-top:25px;
+  box-shadow:0 0 40px rgba(255,255,255,0.5);
+}
+
+/* Kelebek */
 .butterfly{
-  position:fixed;
-  font-size:26px;
-  animation: fly 14s linear infinite;
+  position:absolute;
+  font-size:22px;
+  animation:fly linear infinite;
 }
-
 @keyframes fly{
-  0%{transform:translate(-10vw,80vh)}
-  25%{transform:translate(20vw,40vh)}
-  50%{transform:translate(60vw,70vh)}
-  75%{transform:translate(80vw,20vh)}
-  100%{transform:translate(110vw,60vh)}
+  from{transform:translateY(110vh) rotate(0deg)}
+  to{transform:translateY(-10vh) rotate(360deg)}
 }
 </style>
 </head>
 
 <body>
 
-<div class="card">
-  <div class="heart">💙</div>
-  <h1>Seni Seviyorum</h1>
-  <div id="counter"></div>
-</div>
-
+<!-- Yıldız üret -->
 <script>
-/* 📅 Tanışma Tarihi */
-const startDate = new Date("2024-01-01 00:00:00");
-
-function updateCounter(){
-  const now = new Date();
-  const diff = now - startDate;
-
-  const d = Math.floor(diff/(1000*60*60*24));
-  const h = Math.floor(diff/(1000*60*60))%24;
-  const m = Math.floor(diff/(1000*60))%60;
-  const s = Math.floor(diff/1000)%60;
-
-  document.getElementById("counter").innerHTML =
-    d+" gün<br>"+h+" saat "+m+" dk "+s+" sn 💙";
-}
-setInterval(updateCounter,1000);
-updateCounter();
-
-/* ✨ Yıldız oluştur */
-function star(){
-  const s=document.createElement("div");
+for(let i=0;i<120;i++){
+  let s=document.createElement("div");
   s.className="star";
   s.style.left=Math.random()*100+"vw";
   s.style.top=Math.random()*100+"vh";
+  s.style.animationDuration=(1+Math.random()*2)+"s";
   document.body.appendChild(s);
 }
-for(let i=0;i<120;i++) star();
+</script>
 
-/* 🦋 Kelebek oluştur */
-function butterfly(){
-  const b=document.createElement("div");
+<!-- KELEBEKLER -->
+<script>
+for(let i=0;i<8;i++){
+  let b=document.createElement("div");
   b.className="butterfly";
   b.innerHTML="🦋";
-  b.style.animationDuration=(10+Math.random()*10)+"s";
+  b.style.left=Math.random()*100+"vw";
+  b.style.animationDuration=(6+Math.random()*6)+"s";
   document.body.appendChild(b);
-  setTimeout(()=>b.remove(),20000);
 }
-setInterval(butterfly,2500);
+</script>
+
+<!-- SAYFA 1 -->
+<div id="page1" class="card">
+  <div class="heart">💙</div>
+  <h1>Hazır mısın?</h1>
+  <button onclick="startSurprise()">Hazırım 💙</button>
+</div>
+
+<!-- SAYFA 2 -->
+<div id="page2" class="card" style="display:none;">
+  <div class="heart">💙</div>
+  <h2>Sürprize kalan süre</h2>
+  <h1 id="countdown">Yükleniyor...</h1>
+
+  <img src="bilet.png" class="ticket" alt="Bilet">
+</div>
+
+<script>
+function startSurprise(){
+  document.getElementById("page1").style.display="none";
+  document.getElementById("page2").style.display="block";
+}
+
+/* Geri sayım — 03.04.2026 21:00 */
+const target = new Date("April 3, 2026 21:00:00").getTime();
+
+setInterval(()=>{
+  const now = new Date().getTime();
+  const diff = target - now;
+
+  if(diff < 0){
+    document.getElementById("countdown").innerHTML="Sürpriz zamanı 💙";
+    return;
+  }
+
+  const d = Math.floor(diff/(1000*60*60*24));
+  const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+  const m = Math.floor((diff%(1000*60*60))/(1000*60));
+  const s = Math.floor((diff%(1000*60))/1000);
+
+  document.getElementById("countdown").innerHTML =
+    d+" gün "+h+" saat "+m+" dk "+s+" sn";
+},1000);
 </script>
 
 </body>
