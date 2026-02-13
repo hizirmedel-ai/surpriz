@@ -92,6 +92,8 @@ button:hover{
 
 <body>
 
+<audio id="arkaPlanMuzigi" src="muzik.mp3"></audio>
+
 <div class="container">
   <h1>💙 Sana Küçük Bir Sürprizim Var 💙</h1>
   <p>Hazır olduğunda butona bas...</p>
@@ -110,10 +112,16 @@ setTimeout(()=>{
   document.getElementById("readyBtn").style.display="inline-block";
 },5000);
 
-/* 🎟️ Bileti göster */
+/* 🎟️ Bileti göster ve Müziği başlat */
 function showTicket(){
   document.getElementById("ticket").style.display="block";
   document.getElementById("readyBtn").style.display="none";
+  
+  // Müziği başlatan kısım
+  var audio = document.getElementById("arkaPlanMuzigi");
+  audio.play().catch(function(error) {
+    console.log("Müzik otomatik başlatılamadı, tarayıcı engellemiş olabilir: ", error);
+  });
 }
 
 /* 💙 Kalpler */
