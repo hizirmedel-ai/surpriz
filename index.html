@@ -3,170 +3,138 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sürpriz 💙</title>
+<title>Sürpriz</title>
 
 <style>
 body{
   margin:0;
-  font-family:Arial;
-  background:linear-gradient(180deg,#0f2027,#203a43,#2c5364);
-  color:white;
+  font-family:Arial, sans-serif;
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
   overflow:hidden;
+  color:white;
   text-align:center;
 }
 
-/* CAM KART */
-.card{
-  position:absolute;
-  top:50%;
-  left:50%;
-  transform:translate(-50%,-50%);
-  background:rgba(0,0,0,0.55);
-  backdrop-filter:blur(25px);
-  padding:35px 25px;
-  border-radius:25px;
-  width:90%;
-  max-width:420px;
-  box-shadow:0 0 50px rgba(0,200,255,0.4);
+.container{
+  position:relative;
+  z-index:2;
+  padding:20px;
+  margin-top:40px;
 }
 
-/* Kalp */
-.heart{
-  font-size:65px;
-  animation:pulse 1.5s infinite;
-}
-@keyframes pulse{
-  0%{transform:scale(1)}
-  50%{transform:scale(1.2)}
-  100%{transform:scale(1)}
+h1{
+  font-size:2rem;
+  margin-bottom:15px;
 }
 
-/* Buton */
+p{
+  font-size:1.2rem;
+  margin-bottom:25px;
+}
+
 button{
-  margin-top:25px;
-  padding:16px 35px;
+  padding:15px 30px;
+  font-size:1.2rem;
   border:none;
-  border-radius:50px;
-  font-size:20px;
-  background:linear-gradient(45deg,#00c6ff,#0072ff);
+  border-radius:30px;
+  background:#4fc3f7;
   color:white;
   cursor:pointer;
-  box-shadow:0 0 20px rgba(0,198,255,0.7);
+  box-shadow:0 0 20px rgba(79,195,247,0.8);
 }
 
-/* Bilet */
+button:hover{
+  background:#29b6f6;
+}
+
+/* 🎟️ Bilet */
 .ticket{
-  width:100%;
-  max-height:65vh;
-  object-fit:contain;
-  border-radius:18px;
-  margin-top:20px;
-  box-shadow:0 0 40px rgba(255,255,255,0.7);
+  display:none;
+  margin-top:25px;
 }
 
-/* Konfeti */
-.confetti{
-  position:fixed;
-  top:-10px;
-  width:10px;
-  height:10px;
-  background:red;
-  animation:fall 3s linear forwards;
+.ticket img{
+  width:90%;
+  max-width:420px;
+  border-radius:15px;
+  box-shadow:0 0 30px rgba(255,255,255,0.4);
 }
-@keyframes fall{
-  to{
-    transform:translateY(110vh) rotate(720deg);
-  }
+
+/* 💙 Kalpler */
+.heart{
+  position:fixed;
+  bottom:-50px;
+  font-size:22px;
+  animation:floatUp 8s linear infinite;
+  opacity:0.7;
+}
+
+@keyframes floatUp{
+  0%{transform:translateY(0) scale(1); opacity:0.8;}
+  100%{transform:translateY(-110vh) scale(1.5); opacity:0;}
+}
+
+/* 🦋 Kelebekler */
+.butterfly{
+  position:fixed;
+  top:110vh;
+  font-size:26px;
+  animation:flyUp linear infinite;
+}
+
+@keyframes flyUp{
+  0%{transform:translateY(0) translateX(0);}
+  50%{transform:translateY(-50vh) translateX(40px);}
+  100%{transform:translateY(-120vh) translateX(-40px);}
 }
 </style>
 </head>
 
 <body>
 
-<audio id="music" src="muzik.mp3"></audio>
+<div class="container">
+  <h1>💙 Sana Küçük Bir Sürprizim Var 💙</h1>
+  <p>Hazır olduğunda butona bas...</p>
 
-<!-- SAYFA 1 -->
-<div id="page1" class="card">
-  <div class="heart">💙</div>
-  <h1>Hazır mısın?</h1>
+  <button id="readyBtn" style="display:none;" onclick="showTicket()">Hazırım 💙</button>
 
-  <button id="startBtn" onclick="start()" style="display:none;">
-    Hazırım 💙
-  </button>
-</div>
-
-<!-- SAYFA 2 -->
-<div id="page2" class="card" style="display:none;">
-  <div class="heart">💙</div>
-  <h2>Sürprize kalan süre</h2>
-  <h1 id="countdown"></h1>
-</div>
-
-<!-- SAYFA 3 -->
-<div id="page3" class="card" style="display:none;">
-  <img src="bilet.png" class="ticket">
+  <div class="ticket" id="ticket">
+    <img src="bilet.png" alt="Bilet">
+  </div>
 </div>
 
 <script>
 
-/* 5 sn sonra Hazırım butonu */
+/* ⏱️ 5 saniye sonra buton */
 setTimeout(()=>{
-  document.getElementById("startBtn").style.display="inline-block";
+  document.getElementById("readyBtn").style.display="inline-block";
 },5000);
 
-/* Hazırım */
-function start(){
-
-  /* Müzik */
-  document.getElementById("music").play();
-
-  /* Konfeti */
-  confettiExplosion();
-
-  document.getElementById("page1").style.display="none";
-  document.getElementById("page2").style.display="block";
+/* 🎟️ Bileti göster */
+function showTicket(){
+  document.getElementById("ticket").style.display="block";
+  document.getElementById("readyBtn").style.display="none";
 }
 
-/* Konfeti patlama */
-function confettiExplosion(){
-  for(let i=0;i<120;i++){
-    let c=document.createElement("div");
-    c.className="confetti";
-    c.style.left=Math.random()*100+"vw";
-    c.style.background=
-      "hsl("+Math.random()*360+",100%,50%)";
-    c.style.animationDuration=
-      (2+Math.random()*2)+"s";
-    document.body.appendChild(c);
-
-    setTimeout(()=>c.remove(),4000);
-  }
+/* 💙 Kalpler */
+for(let i=0;i<20;i++){
+  let h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="💙";
+  h.style.left=Math.random()*100+"vw";
+  h.style.animationDuration=(6+Math.random()*5)+"s";
+  document.body.appendChild(h);
 }
 
-/* GERİ SAYIM — 03.04.2026 21:00 */
-const target = new Date("April 3, 2026 21:00:00").getTime();
-
-const timer = setInterval(()=>{
-  const now = new Date().getTime();
-  const diff = target - now;
-
-  if(diff <= 0){
-    clearInterval(timer);
-
-    /* Bilet göster */
-    document.getElementById("page2").style.display="none";
-    document.getElementById("page3").style.display="block";
-    return;
-  }
-
-  const d = Math.floor(diff/(1000*60*60*24));
-  const h = Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-  const m = Math.floor((diff%(1000*60*60))/(1000*60));
-  const s = Math.floor((diff%(1000*60))/1000);
-
-  document.getElementById("countdown").innerHTML =
-    d+" gün "+h+" saat "+m+" dk "+s+" sn";
-},1000);
+/* 🦋 Kelebekler */
+for(let i=0;i<12;i++){
+  let b=document.createElement("div");
+  b.className="butterfly";
+  b.innerHTML="🦋";
+  b.style.left=Math.random()*100+"vw";
+  b.style.animationDuration=(8+Math.random()*6)+"s";
+  document.body.appendChild(b);
+}
 
 </script>
 
